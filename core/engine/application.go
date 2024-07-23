@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/logrusorgru/aurora"
@@ -23,17 +22,16 @@ const (
 	APP_APP        = 1 << 3 //应用应用
 )
 
-//AppConfig 应用配置定义
+// AppConfig 应用配置定义
 type AppConfig struct {
-	Name    string                         //应用名称
-	Type    byte                           //类型
-	Config  interface{}                    //应用配置
-	UIDir   string                         //界面目录
-	UIFS    fs.FS                          //界面目录FS
-	Dir     string                         //应用代码路径
-	Run     func()                         //应用启动函数
-	Version string                         //应用版本
-	Router  map[string][]map[string]string //应用路由表
+	Name   string                         //应用名称
+	Type   byte                           //类型
+	Config interface{}                    //应用配置
+	UIDir  string                         //界面目录
+	UIFS   fs.FS                          //界面目录FS
+	Dir    string                         //应用代码路径
+	Run    func()                         //应用启动函数
+	Router map[string][]map[string]string //应用路由表
 }
 
 // AppInstall 安装应用
@@ -50,10 +48,7 @@ func AppInstall(opt *AppConfig) {
 			opt.UIDir = ui
 		}
 	}
-	if parts := strings.Split(opt.Dir, "@"); len(parts) > 1 {
-		opt.Version = parts[len(parts)-1]
-	}
-	Print(aurora.Green("install app"), aurora.BrightCyan(opt.Name), aurora.BrightBlue(opt.Version))
+	Print(aurora.Green("install app"), aurora.BrightCyan(opt.Name))
 }
 
 // GET 路由处理

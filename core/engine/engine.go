@@ -3,10 +3,8 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
-	"runtime"
 	"time"
 
 	"github.com/BurntSushi/toml"
@@ -16,34 +14,6 @@ import (
 )
 
 var (
-	// Version 引擎版本号
-	Version = "1.0.1"
-	// EngineInfo 引擎信息
-	EngineInfo = &struct {
-		Version          *string
-		StartTime        time.Time //启动时间
-		EnableWaitStream *bool
-		RingSize         *int
-	}{
-		&Version,
-		time.Now(),
-		&config.EnableWaitStream,
-		&config.RingSize,
-	}
-	// config 配置信息
-	config = &struct {
-		EnableWaitStream bool
-		EnableAudio      bool
-		EnableVideo      bool
-		RingSize         int
-		PublishTimeout   time.Duration
-	}{
-		true,
-		true,
-		true,
-		10,
-		time.Minute,
-	}
 	// ConfigRaw 配置信息的原始数据
 	ConfigRaw []byte
 
@@ -62,13 +32,10 @@ func init() {
 
 // Run启动Gin-Apps引擎
 func Run(configFile string) (err error) {
-	//Version
-	Print(aurora.BgGreen(aurora.Black("Start Gin-Apps Engine @ v" + Version)))
-
 	os.WriteFile("stop.sh", []byte(fmt.Sprintf("kill -9 %d", os.Getpid())), 0777)
 
 	//Config字典
-	if ConfigRaw, err = ioutil.ReadFile(configFile); err != nil {
+	if ConfigRaw, err = os.ReadFile(configFile); err != nil {
 		Print(aurora.Red("read config file error:"), err)
 		return
 	}

@@ -6,8 +6,8 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
@@ -105,14 +105,13 @@ func addAppStaticRoute(live bool) {
 
 // AppInfo 应用信息JSON结构
 type AppInfo struct {
-	Name    string                         //应用名称
-	Type    byte                           //类型
-	Config  string                         //应用配置
-	UIDir   string                         //界面路径
-	Dir     string                         //应用代码目录
-	ReadMe  string                         //README.md
-	Version string                         //应用版本
-	Router  map[string][]map[string]string //应用路由表
+	Name   string                         //应用名称
+	Type   byte                           //类型
+	Config string                         //应用配置
+	UIDir  string                         //界面路径
+	Dir    string                         //应用代码目录
+	ReadMe string                         //README.md
+	Router map[string][]map[string]string //应用路由表
 }
 
 // getApp 获取App实时信息
@@ -126,10 +125,9 @@ func getApp(c *gin.Context) {
 			app.UIDir,
 			app.Dir,
 			"",
-			app.Version,
 			app.Router,
 		}
-		if bytes, err := ioutil.ReadFile(filepath.Join(app.Dir, "README.md")); err == nil {
+		if bytes, err := os.ReadFile(filepath.Join(app.Dir, "README.md")); err == nil {
 			p.ReadMe = string(bytes[0:100])
 		}
 		var out bytes.Buffer
