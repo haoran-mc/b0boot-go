@@ -65,12 +65,7 @@ func Run(configFile string) (err error) {
 	//Version
 	Print(aurora.BgGreen(aurora.Black("Start Gin-Apps Engine @ v" + Version)))
 
-	//停止脚本
-	if runtime.GOOS == "windows" {
-		ioutil.WriteFile("stop.bat", []byte(fmt.Sprintf("taskkill /pid %d  -t  -f", os.Getpid())), 0777)
-	} else {
-		ioutil.WriteFile("stop.sh", []byte(fmt.Sprintf("kill -9 %d", os.Getpid())), 0777)
-	}
+	os.WriteFile("stop.sh", []byte(fmt.Sprintf("kill -9 %d", os.Getpid())), 0777)
 
 	//Config字典
 	if ConfigRaw, err = ioutil.ReadFile(configFile); err != nil {
